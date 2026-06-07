@@ -1,0 +1,273 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% ========== STYLE MODERNE ==========
+\definecolor{primary}{RGB}{102,126,234}
+\definecolor{secondary}{RGB}{118,75,162}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textbf{ENSAH - Projet Web}}
+\fancyhead[R]{\thepage}
+\fancyfoot[C]{\textcolor{gray}{Année Universitaire 2025/2026}}
+
+\titleformat{\section}{\large\bfseries\color{primary}}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{secondary}}{\thesubsection}{1em}{}
+
+% ========== PAGE DE GARDE ==========
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    
+    \includegraphics[width=0.3\textwidth]{images.png}\\[0.5cm]
+    {\Large École Nationale des Sciences Appliquées\\[0.2cm]
+    \textbf{Al Hoceima}}\\[1cm]
+    
+    {\Huge \textbf{MINI-PROJET}}\\[0.3cm]
+    {\LARGE Gestion des Absences}\\[0.2cm]
+    {\Large Développement d'une application web complète}\\[1.5cm]
+    
+    \begin{minipage}{0.7\textwidth}
+        \large
+        \textbf{Rédigé par :}\\
+        Nadir Mohamed Anouar\\
+        \texttt{mohamedanouar.nadir@etu.uae.ac.ma}\\[0.5cm]
+        
+        \textbf{Encadrant :}\\
+        Pr.Nadir Mohamed Anouar\\
+        Département Génie Informatique\\[0.5cm]
+        
+        \textbf{Module :}\\
+        Développement Web - PHP/MySQL\\[1cm]
+    \end{minipage}
+    
+    \vfill
+    {\large \textbf{Année Universitaire 2025/2026}}\\[0.3cm]
+    {\small \textcolor{gray}{Filière : Génie Informatique (GI1)}}
+\end{titlepage}
+
+% ========== SOMMAIRE ==========
+\tableofcontents
+\newpage
+
+% ========== INTRODUCTION ==========
+\section{Introduction}
+
+\subsection{Contexte du projet}
+L'École Nationale des Sciences Appliquées d'Al Hoceima (ENSAH) fait face à un besoin croissant de digitalisation des processus pédagogiques. Actuellement, la gestion des absences des étudiants est effectuée manuellement, ce qui entraîne :
+\begin{itemize}
+    \item Une perte de temps pour les enseignants et l'administration
+    \item Un manque de traçabilité des absences
+    \item Des difficultés à générer des statistiques fiables
+    \item Une communication inefficace avec les étudiants
+\end{itemize}
+
+\subsection{Objectifs du projet}
+Ce projet vise à développer une application web complète permettant :
+\begin{itemize}
+    \item La saisie électronique des absences par les enseignants
+    \item La consultation des absences par les étudiants
+    \item La gestion centralisée des comptes utilisateurs (Admin, Enseignant, Étudiant)
+    \item La génération de statistiques et rapports
+    \item La gestion des justifications et avertissements
+\end{itemize}
+
+% ========== TECHNOLOGIES ==========
+\section{Technologies utilisées}
+
+\subsection{Backend}
+\begin{itemize}
+    \item \textbf{PHP 8.0} : Langage serveur pour la logique métier et l'interaction avec la base de données
+    \item \textbf{MySQL} : Système de gestion de base de données relationnelle
+    \item \textbf{PDO} : Interface sécurisée pour les requêtes SQL (protection contre les injections)
+\end{itemize}
+
+\subsection{Frontend}
+\begin{itemize}
+    \item \textbf{HTML5/CSS3} : Structure et style des pages
+    \item \textbf{Bootstrap 5} : Framework CSS responsive (interface moderne et adaptée mobile)
+    \item \textbf{JavaScript} : Recherche en temps réel, confirmations, interactions dynamiques
+    \item \textbf{Font Awesome} : Bibliothèque d'icônes vectorielles
+\end{itemize}
+
+\subsection{Environnement de développement}
+\begin{itemize}
+    \item \textbf{XAMPP} : Serveur local (Apache + MySQL + PHP)
+    \item \textbf{Visual Studio Code} : Éditeur de code
+    \item \textbf{phpMyAdmin} : Gestion graphique de la base de données
+\end{itemize}
+
+\subsection{Pourquoi ces technologies ?}
+\begin{itemize}
+    \item \textbf{PHP/MySQL} : Stack web mature, open-source, largement documentée
+    \item \textbf{Bootstrap} : Accélère le développement responsive sans expertise CSS avancée
+    \item \textbf{XAMPP} : Environnement unifié simple à installer sur toutes les plateformes
+\end{itemize}
+
+% ========== ARCHITECTURE ==========
+\section{Architecture de l'application}
+
+\subsection{Modèle MVC simplifié}
+L'application suit une architecture de type MVC (Modèle-Vue-Contrôleur) :
+\begin{itemize}
+    \item \textbf{Modèle} : Fichiers PHP avec requêtes SQL (dans config/database.php)
+    \item \textbf{Vue} : Templates HTML/Bootstrap (modules/*/liste.php, ajouter.php)
+    \item \textbf{Contrôleur} : Logique métier dans chaque fichier PHP
+\end{itemize}
+
+\subsection{Structure des dossiers}
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\small]
+abscence/
+├── config/            # Configuration base de donnees
+├── includes/          # Composants reutilisables (header, footer, auth)
+├── modules/           # Modules fonctionnels
+│   ├── etudiants/     # CRUD etudiants
+│   ├── comptes/       # Gestion des comptes utilisateurs
+│   └── abscences/     # Gestion des absences
+├── dashboard.php      # Accueil apres connexion
+├── connexion.php      # Page d'authentification
+└── logout.php         # Destruction session
+\end{lstlisting}
+
+\subsection{Base de données}
+\begin{itemize}
+    \item \textbf{utilisateurs} : id, login, mot\_de\_passe, role, enabled
+    \item \textbf{etudiants} : id, nom, prenom, massar\_id, cin, email, niveau
+    \item \textbf{absences} : id, etudiant\_id, enseignant\_id, date\_absence, type\_seance, etat
+\end{itemize}
+
+% ========== FONCTIONNALITÉS ==========
+\section{Fonctionnalités détaillées}
+
+\subsection{Module Authentification}
+\begin{itemize}
+    \item Connexion sécurisée par login/mot de passe (hachage bcrypt)
+    \item Gestion de session PHP
+    \item Déconnexion
+    \item Protection des pages sensibles
+\end{itemize}
+
+\subsection{Module Gestion des étudiants}
+\begin{itemize}
+    \item Liste des étudiants avec recherche en temps réel (JavaScript)
+    \item Ajouter, modifier, supprimer un étudiant
+    \item Validation des données (email, CIN unique)
+    \item Interface moderne avec statistiques
+\end{itemize}
+
+\subsection{Module Gestion des comptes}
+\begin{itemize}
+    \item Création de comptes (Admin, Enseignant, Étudiant)
+    \item Génération automatique de mot de passe aléatoire
+    \item Activation/Désactivation de comptes
+    \item Réinitialisation de mot de passe
+\end{itemize}
+
+\subsection{Module Gestion des absences}
+\begin{itemize}
+    \item Saisie rapide par classe (sélection multiple)
+    \item Liste des absences avec filtres
+    \item Justification d'absence (avec motif)
+    \item Annulation d'absence
+    \item Statistiques (total, justifiées, non justifiées)
+\end{itemize}
+
+% ========== INTERFACES ==========
+\section{Interfaces utilisateur}
+
+\subsection{Dashboard}
+Page d'accueil avec 3 cartes d'accès rapide :
+\begin{itemize}
+    \item Gestion des étudiants
+    \item Gestion des comptes
+    \item Gestion des absences
+\end{itemize}
+
+\subsection{Liste des étudiants}
+\begin{itemize}
+    \item Tableau avec colonnes (ID, Nom, Prénom, Massar, CIN, Email, Niveau)
+    \item Barre de recherche instantanée
+    \item Boutons Modifier/Supprimer
+\end{itemize}
+
+\subsection{Saisie des absences}
+\begin{itemize}
+    \item Sélection de la classe (GI1 à GI5)
+    \item Liste des étudiants avec cases à cocher
+    \item Bouton "Tout sélectionner"
+    \item Enregistrement en un clic
+\end{itemize}
+
+% ========== DÉFIS ==========
+\section{Défis rencontrés et solutions}
+
+\subsection{Problèmes techniques}
+\begin{itemize}
+    \item \textbf{Configuration XAMPP sur Mac} : Utilisation du port 8080 et des permissions de fichiers
+    \item \textbf{Gestion des sessions} : Implémentation correcte de auth.php
+    \item \textbf{Recherche en temps réel} : Utilisation de JavaScript addEventListener
+    \item \textbf{Structure des dossiers} : Organisation MVC claire
+\end{itemize}
+
+\subsection{Améliorations possibles}
+\begin{itemize}
+    \item Ajout de notifications par email (PHPMailer)
+    \item Export des données en CSV/PDF
+    \item Graphiques statistiques avec Chart.js
+    \item Interface dédiée pour les enseignants avec photos des étudiants
+\end{itemize}
+
+% ========== CONCLUSION ==========
+\section{Conclusion}
+
+\subsection{Résultats obtenus}
+Le projet a été mené à bien avec les livrables suivants :
+\begin{itemize}
+    \item Application web complète et fonctionnelle
+    \item 3 modules opérationnels (étudiants, comptes, absences)
+    \item Interface responsive et moderne
+    \item Base de données optimisée
+    \item Code source documenté
+\end{itemize}
+
+\subsection{Perspectives}
+Cette application pourra être déployée en production après :
+\begin{itemize}
+    \item Ajout du module structure pédagogique (filières, modules)
+    \item Intégration d'un système d'envoi d'emails
+    \item Développement de l'interface étudiant
+    \item Mise en place d'avertissements automatiques
+\end{itemize}
+
+\subsection{Compétences acquises}
+\begin{itemize}
+    \item Développement full-stack PHP/MySQL
+    \item Conception de base de données
+    \item Sécurité web (sessions, hashage, validation)
+    \item Design responsive avec Bootstrap
+    \item JavaScript (recherche dynamique)
+\end{itemize}
+
+% ========== BIBLIOGRAPHIE ==========
+\section{Références}
+\begin{itemize}
+    \item Documentation PHP : \url{https://www.php.net}
+    \item Bootstrap 5 : \url{https://getbootstrap.com}
+    \item MySQL : \url{https://dev.mysql.com}
+    \item Cahier des charges fourni par le Prof .
+\end{itemize}
+
+\end{document}
